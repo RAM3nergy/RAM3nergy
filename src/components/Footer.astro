@@ -1,0 +1,77 @@
+---
+import { waLink, WA_DEFAULT } from '../data/site.js';
+
+const quickLinks = [
+  { href: '#tiers', label: 'Product Tiers' },
+  { href: '#calculator', label: 'Load Calculator' },
+  { href: '#transparency', label: 'Radical Transparency' },
+  { href: '#marco-polo', label: 'Commercial BESS' },
+  { href: '#contact', label: 'Contact' },
+];
+---
+
+<footer class="bg-secondary-deep text-slate-300">
+  <div class="container-ram grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
+    <!-- Brand -->
+    <div class="lg:col-span-2">
+      <a href="#top" class="flex items-center gap-2.5" aria-label="RAM3nergy home">
+        <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+            <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" />
+          </svg>
+        </span>
+        <span class="text-lg font-extrabold tracking-tight text-white">
+          RAM<span class="text-accent">3</span>nergy
+        </span>
+      </a>
+      <p class="mt-4 max-w-md text-sm leading-relaxed text-slate-400">
+        Cybersecurity &amp; Energy Engineering | World-Class Cells, Indigenous Engineering.
+        High-precision solar systems and custom LiFePO4 battery packs, assembled and
+        lab-tested in Islamabad, Pakistan.
+      </p>
+      <a href={waLink(WA_DEFAULT)} target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp mt-6">
+        WhatsApp Us
+      </a>
+    </div>
+
+    <!-- Quick links -->
+    <nav aria-label="Footer">
+      <h3 class="text-sm font-bold uppercase tracking-widest text-white">Explore</h3>
+      <ul class="mt-4 space-y-2.5">
+        {quickLinks.map((l) => (
+          <li>
+            <a href={l.href} class="text-sm text-slate-400 transition hover:text-accent">{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Series -->
+    <div>
+      <h3 class="text-sm font-bold uppercase tracking-widest text-white">Series</h3>
+      <ul class="mt-4 space-y-2.5 text-sm text-slate-400">
+        <li><a href="#tiers" class="transition hover:text-accent">Markhor Series — Apex Tier</a></li>
+        <li><a href="#tiers" class="transition hover:text-accent">Urial Series — Value Tier</a></li>
+        <li><a href="#marco-polo" class="transition hover:text-accent">Marco Polo — C&amp;I BESS</a></li>
+      </ul>
+      <h3 class="mt-8 text-sm font-bold uppercase tracking-widest text-white">Contact</h3>
+      <ul class="mt-4 space-y-2.5 text-sm text-slate-400">
+        <li>Islamabad, Pakistan</li>
+        <li>+92 300 1234567</li>
+        <li>sales@ram3nergy.pk</li>
+        <li>Mon–Sat, 9:00–19:00 PKT</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="container-ram flex flex-col items-center justify-between gap-3 py-6 sm:flex-row">
+      <p class="text-xs text-slate-500">
+        © {new Date().getFullYear()} RAM3nergy. All rights reserved. Made in Islamabad 🇵🇰
+      </p>
+      <p class="text-xs text-slate-500">
+        Prices are indicative estimates — formal quotations issued per project.
+      </p>
+    </div>
+  </div>
+</footer>

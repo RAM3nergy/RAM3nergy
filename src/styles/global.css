@@ -1,0 +1,50 @@
+@import '@fontsource-variable/inter';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-surface font-sans text-secondary antialiased;
+  }
+  section[id] {
+    scroll-margin-top: 88px;
+  }
+}
+
+@layer components {
+  .container-ram {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition duration-200;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-dark;
+  }
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-accent-dark;
+  }
+  .btn-outline {
+    @apply border border-primary/30 bg-white text-primary hover:border-primary hover:bg-primary-50;
+  }
+  .btn-whatsapp {
+    @apply bg-whatsapp text-white hover:brightness-95;
+  }
+  .btn-ghost-dark {
+    @apply border border-white/25 text-white hover:bg-white/10;
+  }
+  .input-ram {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-secondary placeholder:text-slate-400 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30;
+  }
+  .label-ram {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600;
+  }
+}
