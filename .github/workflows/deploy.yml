@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: "pages"
   cancel-in-progress: true
 
 env:
@@ -18,17 +18,6 @@ env:
 jobs:
   # ===========================================================================
   # Job 1 — Build the static site and deploy to GitHub Pages.
-  #
-  # To use Cloudflare Pages instead, replace this job's last two steps with a
-  # wrangler publish step, e.g.:
-  #
-  #   - name: Publish to Cloudflare Pages
-  #     run: npx wrangler pages deploy dist --project-name=ram3nergy
-  #     env:
-  #       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-  #       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-  #
-  # and set BASE_PATH to '/' (custom domain is served at the root).
   # ===========================================================================
   deploy-pages:
     name: Build & deploy static site (GitHub Pages)
@@ -44,6 +33,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -56,9 +49,7 @@ jobs:
       - name: Build (Astro static)
         run: npm run build
         env:
-          # Project pages are served under /<repo>/ — set to '/' if you use a
-          # custom domain or Cloudflare Pages.
-          BASE_PATH: /${{ github.event.repository.name }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -70,8 +61,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # ===========================================================================
-  # Job 2 — Build the Docker image and push it to GHCR so the homelab can
-  # pull it:  docker pull ghcr.io/<owner>/ram3nergy:latest
+  # Job 2 — Build the Docker image and push it to GHCR
   # ===========================================================================
   docker-ghcr:
     name: Build & push Docker image (GHCR)
