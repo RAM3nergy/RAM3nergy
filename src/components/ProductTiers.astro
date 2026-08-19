@@ -1,0 +1,200 @@
+---
+import { PRODUCTS, SERIES, MARCO_POLO, formatPKR, waLink, WA_QUOTE } from '../data/site.js';
+
+// Rows of the comparison table, in display order.
+const specRows = [
+  { key: 'capacityKwh', label: 'Capacity', fmt: (p) => `${p.capacityKwh} kWh` },
+  { key: 'voltage', label: 'Nominal Voltage', fmt: (p) => p.voltage },
+  { key: 'config', label: 'Cell Configuration', fmt: (p) => p.config },
+  { key: 'discharge', label: 'Max Discharge', fmt: (p) => p.discharge },
+  { key: 'bms', label: 'BMS Type', fmt: (p) => p.bms },
+  { key: 'cellGrade', label: 'Cell Grade', fmt: (p) => p.cellGrade },
+  { key: 'warrantyYears', label: 'Warranty', fmt: (p) => `${p.warrantyYears} Years` },
+  { key: 'pricePkr', label: 'Estimated Price', fmt: (p) => formatPKR(p.pricePkr) + ' *' },
+];
+
+const seriesOrder = ['markhor', 'urial'];
+---
+
+<section id="tiers" class="bg-surface py-20 lg:py-28">
+  <div class="container-ram">
+    <div class="max-w-2xl">
+      <span class="text-xs font-bold uppercase tracking-widest text-accent">Product Tiers</span>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
+        Two Series. One Standard: Zero Compromise.
+      </h2>
+      <p class="mt-4 text-slate-600">
+        Every RAM3nergy pack is assembled in Islamabad from lab-verified cells. Pick the tier
+        that matches your budget — the engineering discipline is identical.
+      </p>
+    </div>
+
+    <!-- Tab switcher -->
+    <div class="mt-10 flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-1.5 sm:flex-row sm:w-fit" role="tablist" aria-label="Battery series">
+      {seriesOrder.map((id, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls={`panel-${id}`}
+          data-tab={id}
+          class:list={[
+            'tier-tab flex-1 rounded-lg px-6 py-3 text-left transition sm:flex-none',
+            i === 0 ? 'bg-primary text-white shadow' : 'text-slate-600 hover:bg-slate-50',
+          ]}
+        >
+          <span class="block text-sm font-bold">{SERIES[id].name}</span>
+          <span class:list={['block text-xs', i === 0 ? 'text-emerald-200' : 'text-slate-400']}>
+            {SERIES[id].tier}
+          </span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Panels -->
+    {seriesOrder.map((id, i) => {
+      const s = SERIES[id];
+      const items = PRODUCTS.filter((p) => p.series === id);
+      return (
+        <div
+          id={`panel-${id}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${id}`}
+          class:list={['tier-panel mt-8', i !== 0 && 'hidden']}
+        >
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
+            <div class="flex flex-col gap-4 border-b border-slate-100 pb-6 lg:flex-row lg:items-start lg:justify-between">
+              <div class="max-w-2xl">
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl" aria-hidden="true">{s.icon}</span>
+                  <div>
+                    <h3 class="text-xl font-extrabold text-primary">{s.name}</h3>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-accent">{s.tier} · {s.priceNote}</p>
+                  </div>
+                </div>
+                <p class="mt-3 text-sm leading-relaxed text-slate-600">{s.blurb}</p>
+              </div>
+              <span class="chip shrink-0 border-primary/20 bg-primary-50 text-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                {s.highlight}
+              </span>
+            </div>
+
+            <!-- Spec table (horizontal scroll on mobile) -->
+            <div class="mt-6 overflow-x-auto">
+              <table class="w-full min-w-[640px] border-collapse text-sm">
+                <thead>
+                  <tr>
+                    <th scope="col" class="w-44 py-3 pr-4 text-left text-xs font-bold uppercase tracking-wide text-slate-400">
+                      Specification
+                    </th>
+                    {items.map((p) => (
+                      <th scope="col" class="px-4 py-3 text-left">
+                        <span class="block text-base font-extrabold text-secondary">{p.model}</span>
+                        <span class="text-xs font-medium text-slate-400">{p.capacityKwh} kWh LiFePO4</span>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {specRows.map((row, ri) => (
+                    <tr class={ri % 2 === 0 ? 'bg-slate-50/70' : 'bg-white'}>
+                      <th scope="row" class="py-3.5 pr-4 text-left align-top text-xs font-bold uppercase tracking-wide text-slate-500">
+                        {row.label}
+                      </th>
+                      {items.map((p) => (
+                        <td class:list={[
+                          'px-4 py-3.5 align-top font-medium text-slate-700',
+                          row.key === 'pricePkr' && 'text-base font-extrabold text-primary',
+                        ]}>
+                          {row.fmt(p)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-6 flex flex-col items-start justify-between gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center">
+              <p class="text-xs text-slate-400">
+                * Estimated street price in PKR for Islamabad. Final quotation issued after load
+                confirmation — no hidden charges.
+              </p>
+              <a
+                href={waLink(WA_QUOTE(s.name))}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary shrink-0"
+              >
+                Get a {s.name} Quote
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    })}
+
+    <!-- Marco Polo commercial series -->
+    <div id="marco-polo" class="mt-12 overflow-hidden rounded-2xl border border-white/10 bg-secondary shadow-card">
+      <div class="grid lg:grid-cols-2">
+        <div class="p-6 sm:p-10">
+          <span class="chip border-accent/30 bg-accent/10 text-accent">{MARCO_POLO.tier}</span>
+          <h3 class="mt-4 text-2xl font-extrabold text-white">{MARCO_POLO.name}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-slate-300">{MARCO_POLO.blurb}</p>
+          <a href="#contact" class="btn btn-accent mt-6">
+            Discuss a Commercial Project
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+        <div class="border-t border-white/10 bg-white/[0.03] p-6 sm:p-10 lg:border-l lg:border-t-0">
+          <dl class="space-y-3">
+            {MARCO_POLO.specs.map(([k, v]) => (
+              <div class="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                <dt class="shrink-0 text-xs font-bold uppercase tracking-wide text-slate-400">{k}</dt>
+                <dd class="text-sm font-medium text-slate-100 sm:text-right">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var tabs = document.querySelectorAll('.tier-tab');
+    var panels = document.querySelectorAll('.tier-panel');
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) {
+          var active = t === tab;
+          t.setAttribute('aria-selected', active ? 'true' : 'false');
+          t.classList.toggle('bg-primary', active);
+          t.classList.toggle('text-white', active);
+          t.classList.toggle('shadow', active);
+          t.classList.toggle('text-slate-600', !active);
+          t.classList.toggle('hover:bg-slate-50', !active);
+          var sub = t.querySelectorAll('span')[1];
+          if (sub) {
+            sub.classList.toggle('text-emerald-200', active);
+            sub.classList.toggle('text-slate-400', !active);
+          }
+        });
+        panels.forEach(function (p) {
+          p.classList.toggle('hidden', p.id !== 'panel-' + tab.dataset.tab);
+        });
+      });
+    });
+  })();
+</script>
