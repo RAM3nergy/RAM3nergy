@@ -3,8 +3,8 @@
 // calculator physics, and contact channels.
 // ---------------------------------------------------------------------------
 
-export const WHATSAPP_NUMBER = '923001234567'; // E.164, no '+' — replace with the business line
-export const PHONE_DISPLAY = '+92 300 1234567';
+export const WHATSAPP_NUMBER = '923455124790'; // E.164, no '+' — replace with the business line
+export const PHONE_DISPLAY = '+92 345 5124 790';
 export const EMAIL = 'sales@ram3nergy.pk';
 export const ADDRESS = 'Islamabad, Pakistan';
 
